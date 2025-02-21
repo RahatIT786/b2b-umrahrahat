@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PackageController;
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\staff_management\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::post('/api/createrole',[RoleController::class,'createRole']);
 Route::get('/optimize' ,[PackageController::class,'clearCache']);
 Route::get('/migrate' ,[PackageController::class,'migrate']);
 
+Route::post('/api/booking',[BookingController::class,'createBooking']);
 
 Route::middleware('api.key')->post('/departure-city',
     function(Request $request){

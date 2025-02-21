@@ -4,18 +4,13 @@ import AppLayout from '../layout/applayout/applayout'
 import Home from '../pages/Home'
 import About from '../pages/About'
 
+import BookingList from '../pages/BookingList'
+import PnrList from '../pages/PnrList'
+
 // Company Management Section
-import Branches from '../pages/company_management/Branches'
-import BranchesForm from '../pages/company_management/BranchesForm'
 
 
-//Inventory Management
-import PackageComponent from '../pages/inventory_management/package_management/PackageComponent'
-import PackageForm from '../pages/inventory_management/package_management/packageForm';
 
-//Staff Management
-import Role from '../pages/staff_management/Role'
-import Department from '../pages/staff_management/Department'
 const AppRoutes = () => {
   return (
    <BrowserRouter>
@@ -26,18 +21,9 @@ const AppRoutes = () => {
                 <Route path="about" element={<About />} />
 
                 {/* Company Management Routes */}
-                <Route path="/company_management/branch" element={<Branches />}/>
-                <Route path="/company_management/branch-add" element={<BranchesForm />}/> 
+                <Route path="/booking_list" element={<BookingList />}/>
+                <Route path="/pnr_list" element={<PnrList />}/> 
 
-
-                {/* Staff Management Routes */}
-                <Route path='/staff_management/role' element={<Role/>} />
-                <Route path='/staff_management/department' element={<Department/>}/>
-
-
-                {/* Inventory Management */}
-                <Route path="/inventory_management/packages" element={<PackageComponent />} />
-                <Route path="/inventory_management/add_packages" element={<PackageForm />} />
             </Route>
         </Routes>
    </BrowserRouter>
