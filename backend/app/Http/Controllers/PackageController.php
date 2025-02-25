@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\DataStored;
 use App\Models\DepartureCity;
+use App\Models\PnrDetail;
 use App\Services\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -74,5 +75,12 @@ class PackageController extends Controller
                return $e->getMessage();
                 // return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+        }
+
+
+
+        public function getPnrs(){
+            $pnrs=PnrDetail::where('delete_status',1)->get();
+            return response()->json($pnrs);
         }
 }

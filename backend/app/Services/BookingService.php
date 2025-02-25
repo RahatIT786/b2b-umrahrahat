@@ -19,4 +19,8 @@ class BookingService
         $bookingId = now()->format('YmdHis');
         return $this->bookingRepo->create($data,$bookingId);
     }
+
+    public function getBooking(){
+        return $this->bookingRepo->getBooking();
+    }
 }
