@@ -22,8 +22,8 @@ Route::post('/api/company-management/branches',[BranchController::class,'createB
 Route::post('/api/city',[PackageController::class,'store']);
 
 Route::post('/api/createrole',[RoleController::class,'createRole']);
-Route::get('/optimize' ,[PackageController::class,'clearCache']);
-Route::get('/migrate' ,[PackageController::class,'migrate']);
+Route::get('/api/optimize' ,[PackageController::class,'clearCache']);
+Route::get('/api/migrate' ,[PackageController::class,'migrate']);
 
 Route::post('/api/booking',[BookingController::class,'createBooking']);
 Route::get('/api/getbookings',[BookingController::class,'getBooking']);
