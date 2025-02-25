@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBox from '../components/ui/SearchBox';
 import axios from 'axios';
-
+import StatusBadge from '../components/ui/StatusBadge';
 const BookingList = () => {
+    //  ------------------- written by abu -------------------
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchBookings = async () => {
+            try{
+                // await axios.get('sanctum/csrf-cookie');
+                const response = await axios.get('/api/getbookings');
+                console.log("Booking Response data: ",response.data.bookings);
+                setBookings(response.data.bookings);
+          
+
+            }catch(err){
+                console.error('Error fetching Booking data:', err);
+            }finally{
+                setLoading(false);
+            }
+        }
+        fetchBookings();
+    }, []);
+
+    if(loading)return <div>Loading...</div>;
+    //  ------------------- written by abu -------------------
 
 
     return (
@@ -50,55 +74,34 @@ const BookingList = () => {
                                     >
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>S.No</th>
+                                                <th>BOOKING_ID</th>
+                                                <th>PNR_CODE</th>
+                                                <th>PASSENGER_NAME</th>
+                                                <th>DATE</th>
+                                                <th>AIRLINE</th>
+                                                <th>PAX</th>
+                                                <th>BOOKING_STATUS</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                            {bookings.map((booking, index) => (
+
+                                            <tr key={booking.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                                <td>{index + 1}</td>
+                                                <td>{booking.booking_id}</td>
+                                                <td>{booking.booking_pnr_number}</td>
+                                                <td>{booking.booking_psngr_name}</td>
+                                                <td>{booking.booking_date}</td>
+                                                <td>{booking.booking_airline}</td>
+                                                <td>{booking.booking_seats}</td>
+                                                <td>
+                                                    <StatusBadge status={booking.pnr_status} />
+                                                </td>
                                             </tr>
-                                            <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <td>Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr style={{ borderBottom: '1px solid #ddd' }}>
-                                                <td>Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>$162,700</td>
-                                            </tr>
+                                            ))}
+                                            
+                                           
                                         </tbody>
                                     </table>
                                 </div>

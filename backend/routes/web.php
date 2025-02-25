@@ -26,6 +26,13 @@ Route::get('/optimize' ,[PackageController::class,'clearCache']);
 Route::get('/migrate' ,[PackageController::class,'migrate']);
 
 Route::post('/api/booking',[BookingController::class,'createBooking']);
+Route::get('/api/getbookings',[BookingController::class,'getBooking']);
+
+//PNR MANAGEMENT
+Route::get('/api/getpnrs',[PackageController::class,'getPnrs']);
+
+
+// Route::get('/api/bookings',[BookingController::class,'createbook']);
 
 Route::middleware('api.key')->post('/departure-city',
     function(Request $request){

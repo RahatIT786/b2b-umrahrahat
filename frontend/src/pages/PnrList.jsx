@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchBox from '../components/ui/SearchBox';
@@ -11,6 +11,35 @@ const PnrList = () => {
   const [seats, setSeats] = useState(1);
   const [name, setName] = useState('');
   const [errors, setErrors] = useState({});
+
+
+  //  ------------------- written by abu -------------------
+
+  const [pnrs,setPnrs] = useState([]);
+  const [loading,setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchPnrs = async () => {
+      try {
+        await axios.get('sanctum/csrf-cookie');
+        const response = await axios.get('/api/getpnrs');
+        setPnrs(response.data);
+      } catch (err) {
+        console.error('Error fetching PNR data:', err);
+        // setError('Failed to fetch PNR data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPnrs();
+  }, []);
+
+  if(loading)return <div>Loading...</div>;
+
+  // ------------------- written by abu -------------------
+
+
 
   const bookings = [
     { id: 1, pnr: 'PNR123', airline: 'Airline', date: '12/11/2025', city: 'Mumbai', seats: 40 },
@@ -37,18 +66,18 @@ const PnrList = () => {
       try {
         // Prepare data to send
         const bookingData = {
-          booking_pnr_number: selectedBooking.pnr,
+          booking_pnr_number: selectedBooking.pnr_code,
           booking_airline: selectedBooking.airline,
-          booking_date: selectedBooking.date,
+          booking_date: selectedBooking.pnr_date,
           booking_city: selectedBooking.city,
           booking_psngr_name: name,
           booking_seats: seats,
         };
-  
+        console.log("submitted data: ", bookingData);
         // Send POST request to the API
         const response = await axios.post('/api/booking', bookingData);
   
-        console.log('Booking confirmed:', response.data);
+        console.log('Booking confirmed [server response]:', response.data);
   
         // Close modal and reset form
         setShowModal(false);
@@ -121,14 +150,14 @@ const PnrList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings.map((booking, index) => (
+                    {pnrs.map((booking, index) => (
                       <tr key={booking.id} style={{ borderBottom: '1px solid #ddd' }}>
                         <td>{index + 1}</td>
-                        <td>{booking.pnr}</td>
+                        <td>{booking.pnr_code}</td>
                         <td>{booking.airline}</td>
-                        <td>{booking.date}</td>
+                        <td>{booking.pnr_date}</td>
                         <td>{booking.city}</td>
-                        <td>{booking.seats}</td>
+                        <td>{booking.available_seat}</td>
                         <td>
                           <button className="btn btn-primary" onClick={() => handleBookNow(booking)}>
                             Book now
@@ -157,7 +186,7 @@ const PnrList = () => {
             <>
               <div className="row my-3">
                 <div className="col-md-6">
-                  <InputBox label="PNR No" type="text" value={selectedBooking.pnr} readOnly={true} />
+                  <InputBox label="PNR No" type="text" value={selectedBooking.pnr_code} readOnly={true} />
                 </div>
                 <div className="col-md-6">
                   <InputBox label="Airline" type="text" value={selectedBooking.airline} readOnly={true} />
@@ -166,7 +195,7 @@ const PnrList = () => {
 
               <div className="row my-3">
                 <div className="col-md-6">
-                  <InputBox label="Date" type="text" value={selectedBooking.date} readOnly={true} />
+                  <InputBox label="Date" type="text" value={selectedBooking.pnr_date} readOnly={true} />
                 </div>
                 <div className="col-md-6">
                   <InputBox label="City" type="text" value={selectedBooking.city} readOnly={true} />

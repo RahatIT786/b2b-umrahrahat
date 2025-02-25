@@ -49,4 +49,9 @@ class BookingController extends Controller
             ], 500);
         }
     }
+
+    public function getBooking(){
+        $booking = $this->booking->getBooking();
+        return response()->json(['message' => 'All Booking','bookings'=>$booking],200);
+    }
 }
